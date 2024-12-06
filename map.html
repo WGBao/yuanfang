@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<style>
+#map{
+position: absolute;
+width: 100%;
+height:100vh;
+left:0;
+top:0;
+}
+</style>
+<body>
+<div id="map"></div>
+</body>
+<script>
+    var map = L.map("map",{
+    center: [22.82261, 108.37345],
+    zoom:8,
+    crs:L.CRS.EPSG4326
+    });
+    var layer;
+    $.getJSON('中华人民共和国.json',function(data){
+         layer = L.geoJSON(data, {
+            //fillColor: '#fff', //填充颜色
+            //color:'#3ef4c8',//边线颜色
+            //fillOpacity:1, //透明度
+            onEachFeature: setLabel//回调函数
+    });
+    layer.addTo(map);
+    //地图在浏览器中自动居中
+    const bound = layer.getBounds ();
+    map.fitBounds (bound);
+    //设置城市标签的回调函数
+    function setLabel (e){
+        console.log(e);
+    //将标签定义为icon的样式显示
+        const icon = L.divIcon({
+            className: "test",
+            html: "<div>" + e.properties.name + "</div>"
+        });
+        //(标签显示的位置,要显示的标签)
+        // if(e.properties.center!=null){
+        //     var x = e.properties.center[0];
+        //     var y = e.properties.center[1];
+        //     var loca = [x,y];
+        //     console.log(loca);
+        //     L.marker(loca, {icon: icon}).addTo(map);
+        // }
+    }
+});
+
+</script>
+</html>
